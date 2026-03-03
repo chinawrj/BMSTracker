@@ -21,18 +21,12 @@ struct PowerGaugeView: View {
         abs(power)
     }
 
-    /// 功率显示文本（根据大小自动选择 W 或 kW）
+    /// 功率显示文本，始终使用 W
     private var powerText: String {
-        if absPower >= 1000 {
-            return String(format: "%.2f", absPower / 1000)
-        } else {
-            return String(format: "%.0f", absPower)
-        }
+        String(format: "%.0f", absPower)
     }
 
-    private var powerUnit: String {
-        absPower >= 1000 ? "kW" : "W"
-    }
+    private var powerUnit: String { "W" }
 
     /// 放电为负电流，显示为正功率（消耗）；充电为正电流
     private var powerLabel: String {

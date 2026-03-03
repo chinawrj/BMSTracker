@@ -15,8 +15,9 @@ final class BMSSimulator {
 
     /// 模拟参数
     private var baseSoC: Double = 78.0
-    private var baseCurrent: Double = -12.5 // 负值=放电
+    private var baseCurrent: Double = -35.0 // 负值=放电
     private let cellCount = 16
+    private var tickCount = 0
 
     init(dataStore: BMSDataStore) {
         self.dataStore = dataStore
@@ -25,14 +26,21 @@ final class BMSSimulator {
     /// 立即生成一次模拟数据
     func simulateOnce() {
         guard let dataStore = dataStore else { return }
+        tickCount += 1
 
         // SoC 随机波动
         baseSoC += Double.random(in: -0.5...0.3)
         baseSoC = max(5, min(100, baseSoC))
 
-        // 电流随机波动
-        baseCurrent += Double.random(in: -1.0...1.0)
-        baseCurrent = max(-30, min(30, baseCurrent))
+        // 电流：大范围波动，偶尔出现大功率场景
+        // 每 5-8 次随机触发一次大电流突变
+        if tickCount % Int.random(in: 5...8) == 0 {
+            // 大功率突发：±50~100A
+            baseCurrent = Double.random(in: -100 ... -50) * (Bool.random() ? 1 : -1)
+        } else {
+            baseCurrent += Double.random(in: -5.0...5.0)
+        }
+        baseCurrent = max(-120, min(120, baseCurrent))
 
         // 基础 Cell 电压根据 SoC 推算 (~3.0V@0% ~ 3.65V@100%)
         let baseCellVoltage = 3.0 + (baseSoC / 100.0) * 0.65
