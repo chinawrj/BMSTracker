@@ -6,8 +6,37 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B40512A22F57189500AA7CFA /* BMSTrackerWatchKit Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = B40512982F57189400AA7CFA /* BMSTrackerWatchKit Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		B40512A02F57189500AA7CFA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B40512592F570E4400AA7CFA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B40512972F57189400AA7CFA;
+			remoteInfo = "BMSTrackerWatchKit Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B40512A62F57189500AA7CFA /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				B40512A22F57189500AA7CFA /* BMSTrackerWatchKit Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		B40512612F570E4400AA7CFA /* BMSTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BMSTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B40512982F57189400AA7CFA /* BMSTrackerWatchKit Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BMSTrackerWatchKit Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +45,22 @@
 			path = BMSTracker;
 			sourceTree = "<group>";
 		};
+		B40512992F57189400AA7CFA /* BMSTrackerWatchKit Watch App */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "BMSTrackerWatchKit Watch App";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		B405125E2F570E4400AA7CFA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B40512952F57189400AA7CFA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -33,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				B40512632F570E4400AA7CFA /* BMSTracker */,
+				B40512992F57189400AA7CFA /* BMSTrackerWatchKit Watch App */,
 				B40512622F570E4400AA7CFA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				B40512612F570E4400AA7CFA /* BMSTracker.app */,
+				B40512982F57189400AA7CFA /* BMSTrackerWatchKit Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -55,10 +98,12 @@
 				B405125D2F570E4400AA7CFA /* Sources */,
 				B405125E2F570E4400AA7CFA /* Frameworks */,
 				B405125F2F570E4400AA7CFA /* Resources */,
+				B40512A62F57189500AA7CFA /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				B40512A12F57189500AA7CFA /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				B40512632F570E4400AA7CFA /* BMSTracker */,
@@ -68,6 +113,28 @@
 			);
 			productName = BMSTracker;
 			productReference = B40512612F570E4400AA7CFA /* BMSTracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B40512972F57189400AA7CFA /* BMSTrackerWatchKit Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B40512A32F57189500AA7CFA /* Build configuration list for PBXNativeTarget "BMSTrackerWatchKit Watch App" */;
+			buildPhases = (
+				B40512942F57189400AA7CFA /* Sources */,
+				B40512952F57189400AA7CFA /* Frameworks */,
+				B40512962F57189400AA7CFA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B40512992F57189400AA7CFA /* BMSTrackerWatchKit Watch App */,
+			);
+			name = "BMSTrackerWatchKit Watch App";
+			packageProductDependencies = (
+			);
+			productName = "BMSTrackerWatchKit Watch App";
+			productReference = B40512982F57189400AA7CFA /* BMSTrackerWatchKit Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -81,6 +148,9 @@
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					B40512602F570E4400AA7CFA = {
+						CreatedOnToolsVersion = 26.2;
+					};
+					B40512972F57189400AA7CFA = {
 						CreatedOnToolsVersion = 26.2;
 					};
 				};
@@ -100,12 +170,20 @@
 			projectRoot = "";
 			targets = (
 				B40512602F570E4400AA7CFA /* BMSTracker */,
+				B40512972F57189400AA7CFA /* BMSTrackerWatchKit Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B405125F2F570E4400AA7CFA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B40512962F57189400AA7CFA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +200,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		B40512942F57189400AA7CFA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B40512A12F57189500AA7CFA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B40512972F57189400AA7CFA /* BMSTrackerWatchKit Watch App */;
+			targetProxy = B40512A02F57189500AA7CFA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B405126A2F570E4600AA7CFA /* Debug */ = {
@@ -256,6 +349,7 @@
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "需要蓝牙权限来连接 BMS 设备并读取电池数据";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -288,6 +382,7 @@
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "需要蓝牙权限来连接 BMS 设备并读取电池数据";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -310,6 +405,72 @@
 			};
 			name = Release;
 		};
+		B40512A42F57189500AA7CFA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WM4JXVE5GV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BMSTrackerWatchKit;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.linetkux.BMSTracker;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.linetkux.BMSTracker.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Debug;
+		};
+		B40512A52F57189500AA7CFA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WM4JXVE5GV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = BMSTrackerWatchKit;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.linetkux.BMSTracker;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.linetkux.BMSTracker.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.2;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -327,6 +488,15 @@
 			buildConfigurations = (
 				B405126D2F570E4600AA7CFA /* Debug */,
 				B405126E2F570E4600AA7CFA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B40512A32F57189500AA7CFA /* Build configuration list for PBXNativeTarget "BMSTrackerWatchKit Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B40512A42F57189500AA7CFA /* Debug */,
+				B40512A52F57189500AA7CFA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
