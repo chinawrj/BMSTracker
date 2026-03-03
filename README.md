@@ -12,6 +12,12 @@ A Battery Management System (BMS) monitor for iOS and watchOS. Displays real-tim
   <img src="Screenshots/watch.png" width="150" alt="Apple Watch Screenshot" />
 </p>
 
+<p align="center">
+  <img src="Screenshots/iphone_power.png" width="400" alt="iPhone Power Gauge (Landscape)" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="Screenshots/watch_power.png" width="150" alt="Watch Power Gauge" />
+</p>
+
 ## Features
 
 - **Real-time BMS Data** — Current, State of Charge (SoC), total voltage
@@ -21,6 +27,8 @@ A Battery Management System (BMS) monitor for iOS and watchOS. Displays real-tim
 - **BLE Communication** — Connects to BMS hardware via Bluetooth Low Energy
 - **Apple Watch App** — Companion watchOS app showing SoC, voltage, current, and cell voltages
 - **iOS → Watch Sync** — Automatic data push via WatchConnectivity (applicationContext, sendMessage, transferUserInfo)
+- **Power Gauge (iPhone)** — Rotate to landscape for a full-screen real-time power display (W) with mini SoC ring
+- **Power Gauge (Watch)** — Long press to toggle a full-screen power gauge view
 - **Offline Cache** — Last known data persisted to UserDefaults, available on next launch
 - **Simulator Mode** — Built-in data simulator for development and testing
 
@@ -102,6 +110,12 @@ MIT
   <img src="Screenshots/watch.png" width="150" alt="Apple Watch 截图" />
 </p>
 
+<p align="center">
+  <img src="Screenshots/iphone_power.png" width="400" alt="iPhone 功率大屏（横屏）" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="Screenshots/watch_power.png" width="150" alt="Watch 功率大屏" />
+</p>
+
 ## 功能
 
 - **实时 BMS 数据** — 电流、电量百分比（SoC）、总电压
@@ -111,6 +125,8 @@ MIT
 - **BLE 通信** — 通过蓝牙低功耗连接 BMS 硬件
 - **Apple Watch 应用** — watchOS 伴侣应用，显示 SoC、电压、电流和 Cell 电压
 - **iOS → Watch 同步** — 通过 WatchConnectivity 自动推送数据
+- **功率大屏（iPhone）** — 横屏自动切换全屏实时功率显示（W），带迷你 SoC 圆环
+- **功率大屏（Watch）** — 长按切换全屏功率仪表视图
 - **离线缓存** — 上次数据持久化到 UserDefaults，下次启动时可用
 - **模拟器模式** — 内置数据模拟器，方便开发和测试
 
