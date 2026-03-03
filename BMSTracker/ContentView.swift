@@ -13,10 +13,25 @@ struct ContentView: View {
     var simulator: BMSSimulator
 
     @State private var isSimulating = false
+    @Environment(\.horizontalSizeClass) private var hSizeClass
+    @Environment(\.verticalSizeClass) private var vSizeClass
+
+    /// 横屏检测：verticalSizeClass 为 compact 时是横屏
+    private var isLandscape: Bool {
+        vSizeClass == .compact
+    }
 
     private var data: BMSData { dataStore.bmsData }
 
     var body: some View {
+        if isLandscape {
+            PowerGaugeView(data: data)
+        } else {
+            portraitView
+        }
+    }
+
+    private var portraitView: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
