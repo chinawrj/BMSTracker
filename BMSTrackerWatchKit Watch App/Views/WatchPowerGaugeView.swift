@@ -68,16 +68,40 @@ struct WatchPowerGaugeView: View {
 
                     Spacer()
 
-                    // 底部小字
-                    HStack(spacing: 8) {
+                    // 底部：小 SoC 圆环 + V/A
+                    HStack(spacing: 6) {
+                        miniSocRing
                         miniLabel(String(format: "%.1fV", data.totalVoltage))
                         miniLabel(String(format: "%.1fA", data.current))
-                        miniLabel(String(format: "%.0f%%", data.soc))
                     }
                     .padding(.bottom, 8)
                 }
             }
         }
+    }
+
+    /// 小型 SoC 圆环
+    private var miniSocRing: some View {
+        let size: CGFloat = 20
+        let lineWidth: CGFloat = 2.5
+        return ZStack {
+            Circle()
+                .stroke(Color.white.opacity(0.15), lineWidth: lineWidth)
+            Circle()
+                .trim(from: 0, to: CGFloat(data.soc / 100.0))
+                .stroke(socRingColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+            Text(String(format: "%.0f", data.soc))
+                .font(.system(size: 7, weight: .bold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.5))
+        }
+        .frame(width: size, height: size)
+    }
+
+    private var socRingColor: Color {
+        if data.soc > 60 { return .green }
+        if data.soc > 20 { return .orange }
+        return .red
     }
 
     private func miniLabel(_ text: String) -> some View {

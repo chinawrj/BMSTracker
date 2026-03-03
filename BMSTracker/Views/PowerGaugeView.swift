@@ -88,21 +88,46 @@ struct PowerGaugeView: View {
                 .frame(maxWidth: .infinity)
             }
 
-            // 右下角小字：电压 / 电流 / SoC
+            // 右下角小字：电压 / 电流 + SoC 圆环
             VStack(alignment: .trailing, spacing: 4) {
                 Spacer()
-                HStack(spacing: 0) {
+                HStack(alignment: .bottom, spacing: 12) {
                     Spacer()
+                    // 小 SoC 圆环
+                    miniSocRing
                     VStack(alignment: .trailing, spacing: 3) {
                         miniMetric(value: String(format: "%.1fV", data.totalVoltage))
                         miniMetric(value: String(format: "%.2fA", data.current))
-                        miniMetric(value: String(format: "%.0f%%", data.soc))
                     }
                 }
             }
             .padding(20)
         }
         .statusBarHidden(true)
+    }
+
+    /// 小型 SoC 圆环，类似 Android 通知栏电池图标
+    private var miniSocRing: some View {
+        let size: CGFloat = 32
+        let lineWidth: CGFloat = 3.5
+        return ZStack {
+            Circle()
+                .stroke(Color.white.opacity(0.15), lineWidth: lineWidth)
+            Circle()
+                .trim(from: 0, to: CGFloat(data.soc / 100.0))
+                .stroke(socRingColor, style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+            Text(String(format: "%.0f", data.soc))
+                .font(.system(size: 10, weight: .bold, design: .rounded))
+                .foregroundStyle(.white.opacity(0.6))
+        }
+        .frame(width: size, height: size)
+    }
+
+    private var socRingColor: Color {
+        if data.soc > 60 { return .green }
+        if data.soc > 20 { return .orange }
+        return .red
     }
 
     private func miniMetric(value: String) -> some View {
