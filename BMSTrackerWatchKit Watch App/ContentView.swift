@@ -115,25 +115,21 @@ struct ContentView: View {
 
     private var cellVoltageList: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("Cell 电压")
+            Text("Cell 电压 (V)")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
 
             LazyVGrid(columns: [
                 GridItem(.flexible(), spacing: 4),
                 GridItem(.flexible(), spacing: 4),
-            ], spacing: 4) {
+            ], spacing: 3) {
                 ForEach(Array(data.cellVoltages.enumerated()), id: \.offset) { index, voltage in
-                    HStack(spacing: 2) {
-                        Text("\(index + 1)")
-                            .font(.system(.caption2, design: .monospaced))
-                            .foregroundStyle(.secondary)
-                            .frame(width: 16, alignment: .trailing)
-                        Text(String(format: "%.3f", voltage))
-                            .font(.system(.caption2, design: .monospaced))
-                            .foregroundStyle(cellColor(voltage))
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    Text("\(index + 1) " + String(format: "%.3f", voltage))
+                        .font(.system(.caption2, design: .monospaced))
+                        .foregroundStyle(cellColor(voltage))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                 }
             }
         }

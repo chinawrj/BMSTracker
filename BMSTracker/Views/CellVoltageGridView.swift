@@ -34,21 +34,19 @@ struct CellVoltageCard: View {
     }
 
     var body: some View {
-        VStack(spacing: 4) {
-            Text("C\(index + 1)")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            Text(String(format: "%.3f", voltage))
-                .font(.system(.caption, design: .monospaced))
-                .fontWeight(.medium)
+        HStack(alignment: .firstTextBaseline, spacing: 0) {
+            Text("\(index + 1)")
+                .font(.system(.caption2, design: .monospaced))
+                .foregroundStyle(.tertiary)
+                .frame(width: 14, alignment: .trailing)
+            Text(String(format: " %.3f", voltage))
+                .font(.system(.callout, design: .monospaced))
+                .fontWeight(.semibold)
                 .foregroundStyle(voltageColor)
-            Text("V")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 8))
+        .padding(.vertical, 6)
+        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 6))
     }
 }
 
@@ -69,7 +67,7 @@ struct CellVoltageGridView: View {
         VStack(alignment: .leading, spacing: 12) {
             // 标题栏
             HStack {
-                Label("Cell 电压", systemImage: "battery.100")
+                Label("Cell 电压 (V)", systemImage: "battery.100")
                     .font(.headline)
                 Spacer()
                 if let min = minVoltage, let max = maxVoltage {
