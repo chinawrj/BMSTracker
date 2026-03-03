@@ -10,9 +10,26 @@ import SwiftUI
 struct ContentView: View {
     var receiver: WatchDataReceiver
 
+    @State private var showPowerGauge = false
+
     private var data: BMSData { receiver.bmsData }
 
     var body: some View {
+        Group {
+            if showPowerGauge {
+                WatchPowerGaugeView(data: data)
+                    .onLongPressGesture(minimumDuration: 0.5) {
+                        showPowerGauge = false
+                    }
+            } else {
+                dashboardView
+            }
+        }
+    }
+
+    // MARK: - Dashboard
+
+    private var dashboardView: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 12) {
@@ -59,6 +76,9 @@ struct ContentView: View {
                 .padding(.horizontal, 4)
             }
             .navigationTitle("BMS")
+            .onLongPressGesture(minimumDuration: 0.5) {
+                showPowerGauge = true
+            }
         }
     }
 
