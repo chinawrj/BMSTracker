@@ -13,6 +13,7 @@ struct ContentView: View {
     var simulator: BMSSimulator
 
     @State private var isSimulating = false
+    @State private var showDeviceList = false
     @Environment(\.horizontalSizeClass) private var hSizeClass
     @Environment(\.verticalSizeClass) private var vSizeClass
 
@@ -85,6 +86,17 @@ struct ContentView: View {
             .refreshable {
                 // 下拉刷新：触发重新读取缓存
                 dataStore.loadFromCache()
+            }
+            .sheet(isPresented: $showDeviceList) {
+                DeviceListView(bleManager: bleManager)
+                    .presentationDetents([.medium, .large])
+            }
+            .onAppear {
+                // 启动时如果未连接，自动弹出设备搜索列表
+                if dataStore.connectionState == .disconnected {
+                    bleManager.startScanning()
+                    showDeviceList = true
+                }
             }
         }
     }
@@ -252,8 +264,10 @@ struct ContentView: View {
             switch dataStore.connectionState {
             case .disconnected:
                 bleManager.startScanning()
+                showDeviceList = true
             case .scanning, .connecting:
                 bleManager.stopScanning()
+                showDeviceList = false
             case .connected:
                 bleManager.disconnect()
             }

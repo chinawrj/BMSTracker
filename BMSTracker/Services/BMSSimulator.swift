@@ -57,6 +57,9 @@ final class BMSSimulator {
             soc: baseSoC,
             totalVoltage: totalVoltage,
             cellVoltages: cellVoltages,
+            temp1: Double.random(in: 22...28),
+            temp2: Double.random(in: 21...27),
+            mosfetTemp: Double.random(in: 30...38),
             lastUpdated: Date()
         )
 

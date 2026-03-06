@@ -15,8 +15,14 @@ struct BMSData: Codable, Sendable {
     var soc: Double
     /// 总电压 (V)
     var totalVoltage: Double
-    /// 各 Cell 电压 (V)，最多 24 个
+    /// 各 Cell 电压 (V)，最多 32 个
     var cellVoltages: [Double]
+    /// 温度传感器 1 (°C)
+    var temp1: Double
+    /// 温度传感器 2 (°C)
+    var temp2: Double
+    /// MOS 管温度 (°C)
+    var mosfetTemp: Double
     /// 最后更新时间
     var lastUpdated: Date
 
@@ -37,6 +43,7 @@ struct BMSData: Codable, Sendable {
         soc: 0.0,
         totalVoltage: 0.0,
         cellVoltages: [],
+        temp1: 0, temp2: 0, mosfetTemp: 0,
         lastUpdated: .distantPast
     )
 
@@ -49,6 +56,7 @@ struct BMSData: Codable, Sendable {
             3.311, 3.309, 3.314, 3.307, 3.316, 3.303,
             3.313, 3.306, 3.317, 3.302
         ],
+        temp1: 25.3, temp2: 24.8, mosfetTemp: 32.1,
         lastUpdated: Date()
     )
 }
