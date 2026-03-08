@@ -27,6 +27,12 @@ struct ContentView: View {
     var body: some View {
         if isLandscape {
             PowerGaugeView(data: data)
+                .onAppear {
+                    UIApplication.shared.isIdleTimerDisabled = true
+                }
+                .onDisappear {
+                    UIApplication.shared.isIdleTimerDisabled = false
+                }
         } else {
             portraitView
         }
