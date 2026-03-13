@@ -59,6 +59,13 @@ final class BLEManager: NSObject {
     private let jkCharUUID    = CBUUID(string: "FFE1")
     private let jkWriteCharUUID = CBUUID(string: "FFE2")  // 旧 BLE 模块的写入特征
 
+    // CoreBluetooth 状态恢复标识符 (后台模式)
+    private static let restoreIdentifier = "com.linetkux.BMSTracker.central"
+
+    // 自动重连
+    private var shouldAutoReconnect = false
+    private var lastConnectedPeripheralID: UUID?
+
     // 写入命令码
     private let CMD_CELL_INFO: UInt8   = 0x96
     private let CMD_DEVICE_INFO: UInt8 = 0x97
@@ -90,7 +97,11 @@ final class BLEManager: NSObject {
         discoveredDevices.removeAll()
         totalDiscoveredCount = 0
         if centralManager == nil {
-            centralManager = CBCentralManager(delegate: self, queue: nil)
+            centralManager = CBCentralManager(
+                delegate: self,
+                queue: nil,
+                options: [CBCentralManagerOptionRestoreIdentifierKey: BLEManager.restoreIdentifier]
+            )
         } else if centralManager?.state == .poweredOn {
             beginScan()
         }
@@ -116,12 +127,15 @@ final class BLEManager: NSObject {
         isScanning = false
         connectedPeripheral = device.peripheral
         connectedPeripheral?.delegate = self
+        lastConnectedPeripheralID = device.peripheral.identifier
+        shouldAutoReconnect = true
         dataStore.connectionState = .connecting
         centralManager?.connect(device.peripheral, options: nil)
     }
 
     /// 断开连接
     func disconnect() {
+        shouldAutoReconnect = false  // 用户主动断开，不自动重连
         cellInfoRetryTimer?.invalidate()
         cellInfoRetryTimer = nil
         if let peripheral = connectedPeripheral {
@@ -139,11 +153,9 @@ final class BLEManager: NSObject {
     // MARK: - 私有方法
 
     private func beginScan() {
-        logger.info("开始扫描所有 BLE 设备 (不按 service UUID 过滤，回调里按名称过滤 JK)")
-        // 不传 withServices 过滤: 扫描所有 BLE 设备，在 didDiscover 里按名称过滤
-        // 这样可以统计总设备数，也避免某些 BMS 不在广播中包含 FFE0 service 的情况
+        logger.info("开始扫描 BLE 设备 (使用 FFE0 service UUID 过滤，支持后台扫描)")
         centralManager?.scanForPeripherals(
-            withServices: nil,
+            withServices: [jkServiceUUID],
             options: [CBCentralManagerScanOptionAllowDuplicatesKey: false]
         )
     }
@@ -433,6 +445,16 @@ extension BLEManager: CBCentralManagerDelegate {
             case .poweredOn:
                 if isScanning {
                     beginScan()
+                } else if shouldAutoReconnect, let peripheralID = lastConnectedPeripheralID {
+                    // 蓝牙恢复后自动重连上次的设备
+                    let knownPeripherals = central.retrievePeripherals(withIdentifiers: [peripheralID])
+                    if let peripheral = knownPeripherals.first {
+                        logger.info("蓝牙已开启，自动重连: \(peripheral.name ?? "unknown")")
+                        connectedPeripheral = peripheral
+                        peripheral.delegate = self
+                        dataStore.connectionState = .connecting
+                        centralManager?.connect(peripheral, options: nil)
+                    }
                 }
             case .poweredOff, .unauthorized, .unsupported:
                 dataStore.connectionState = .disconnected
@@ -512,11 +534,48 @@ extension BLEManager: CBCentralManagerDelegate {
                                      didDisconnectPeripheral peripheral: CBPeripheral,
                                      error: Error?) {
         Task { @MainActor in
-            dataStore.connectionState = .disconnected
-            connectedPeripheral = nil
+            logger.info("断开连接: \(peripheral.name ?? "unknown"), error=\(error?.localizedDescription ?? "none")")
             writeCharacteristic = nil
             notifyCharacteristic = nil
             frameBuffer = Data()
+            cellInfoRetryTimer?.invalidate()
+            cellInfoRetryTimer = nil
+
+            if shouldAutoReconnect {
+                // 非主动断开 → 自动重连
+                logger.info("尝试自动重连...")
+                dataStore.connectionState = .connecting
+                connectedPeripheral = peripheral
+                peripheral.delegate = self
+                centralManager?.connect(peripheral, options: nil)
+            } else {
+                connectedPeripheral = nil
+                dataStore.connectionState = .disconnected
+            }
+        }
+    }
+
+    /// CoreBluetooth 状态恢复 (app 被系统杀死后恢复)
+    nonisolated func centralManager(_ central: CBCentralManager,
+                                     willRestoreState dict: [String: Any]) {
+        Task { @MainActor in
+            logger.info("CoreBluetooth 状态恢复")
+            if let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral],
+               let peripheral = peripherals.first {
+                logger.info("恢复已连接外设: \(peripheral.name ?? "unknown")")
+                connectedPeripheral = peripheral
+                peripheral.delegate = self
+                lastConnectedPeripheralID = peripheral.identifier
+                shouldAutoReconnect = true
+
+                if peripheral.state == .connected {
+                    dataStore.connectionState = .connected
+                    peripheral.discoverServices([jkServiceUUID])
+                } else {
+                    dataStore.connectionState = .connecting
+                    centralManager?.connect(peripheral, options: nil)
+                }
+            }
         }
     }
 }
