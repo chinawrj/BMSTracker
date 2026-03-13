@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import UIKit
 
 /// 模拟 BMS 数据源，用于开发调试
 /// 生成随机但合理的电池数据，模拟真实 BMS 行为
 final class BMSSimulator {
-    private var timer: Timer?
+    private var timerSource: DispatchSourceTimer?
     private weak var dataStore: BMSDataStore?
+    private var backgroundTaskID: UIBackgroundTaskIdentifier = .invalid
 
     /// 模拟参数
     private var baseSoC: Double = 78.0
@@ -72,21 +74,55 @@ final class BMSSimulator {
     }
 
     /// 开始定时模拟（每 2 秒更新一次）
+    /// 使用 DispatchSourceTimer + beginBackgroundTask 以支持后台运行
     func startContinuous() {
         simulateOnce()
-        timer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-            self?.simulateOnce()
+        requestBackgroundTime()
+
+        let queue = DispatchQueue.global(qos: .utility)
+        let source = DispatchSource.makeTimerSource(queue: queue)
+        source.schedule(deadline: .now() + 2, repeating: 2.0)
+        source.setEventHandler { [weak self] in
+            DispatchQueue.main.async {
+                self?.simulateOnce()
+            }
         }
+        source.resume()
+        timerSource = source
     }
 
     /// 停止定时模拟
     func stop() {
-        timer?.invalidate()
-        timer = nil
+        timerSource?.cancel()
+        timerSource = nil
+        endBackgroundTask()
         dataStore?.connectionState = .disconnected
     }
 
     var isRunning: Bool {
-        timer != nil
+        timerSource != nil
+    }
+
+    // MARK: - Background Task
+
+    /// 申请后台执行时间，到期后重新申请（延长 simulate 模式后台存活）
+    private func requestBackgroundTime() {
+        endBackgroundTask()
+        backgroundTaskID = UIApplication.shared.beginBackgroundTask(
+            withName: "BMSSimulator"
+        ) { [weak self] in
+            // 到期回调：做最后一次更新，然后重新申请
+            self?.simulateOnce()
+            self?.endBackgroundTask()
+            // 尝试立即重新申请新的后台任务（系统可能拒绝）
+            self?.requestBackgroundTime()
+        }
+    }
+
+    private func endBackgroundTask() {
+        if backgroundTaskID != .invalid {
+            UIApplication.shared.endBackgroundTask(backgroundTaskID)
+            backgroundTaskID = .invalid
+        }
     }
 }
