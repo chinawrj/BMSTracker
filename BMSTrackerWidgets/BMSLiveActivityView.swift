@@ -105,27 +105,39 @@ struct BMSLiveActivity: Widget {
                     .foregroundStyle(.tertiary)
             }
 
-            // SOC 进度条
-            HStack(spacing: 12) {
-                Text(String(format: "%.0f%%", context.state.soc))
-                    .font(.system(.title, design: .rounded))
-                    .fontWeight(.bold)
-                    .foregroundStyle(socColor(context.state.soc))
+            // SOC + 功率 突出行
+            HStack(spacing: 0) {
+                // SOC
+                VStack(spacing: 4) {
+                    Text(String(format: "%.0f%%", context.state.soc))
+                        .font(.system(.title, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundStyle(socColor(context.state.soc))
+                    ProgressView(value: context.state.soc / 100)
+                        .tint(socColor(context.state.soc))
+                }
+                .frame(maxWidth: .infinity)
 
-                ProgressView(value: context.state.soc / 100)
-                    .tint(socColor(context.state.soc))
+                // 功率
+                VStack(spacing: 4) {
+                    Text(String(format: "%.0fW", context.state.power))
+                        .font(.system(.title, design: .rounded))
+                        .fontWeight(.bold)
+                        .foregroundStyle(context.state.current < 0 ? .orange : .green)
+                    Text(context.state.current < 0 ? "放电" : "充电")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity)
             }
 
-            // 数据网格：电压 / 电流 / 功率 / 温度
+            // 数据网格：电压 / 电流 / 温度
             HStack(spacing: 0) {
                 statItem(label: "电压",
                          value: String(format: "%.1fV", context.state.totalVoltage),
                          color: .blue)
                 statItem(label: "电流",
                          value: String(format: "%.2fA", context.state.current),
-                         color: context.state.current < 0 ? .orange : .green)
-                statItem(label: "功率",
-                         value: String(format: "%.0fW", context.state.power),
                          color: context.state.current < 0 ? .orange : .green)
                 statItem(label: "温度",
                          value: String(format: "%.1f°C", context.state.temp1),
