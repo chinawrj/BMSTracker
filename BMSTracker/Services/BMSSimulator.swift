@@ -60,6 +60,10 @@ final class BMSSimulator {
             temp1: Double.random(in: 22...28),
             temp2: Double.random(in: 21...27),
             mosfetTemp: Double.random(in: 30...38),
+            remainCapacity: baseSoC / 100.0 * 81.0,
+            fullChargeCapacity: 81.0,
+            cycleCount: 42,
+            totalCycleCapacity: 3402.0 + Double(tickCount) * 0.1,
             lastUpdated: Date()
         )
 

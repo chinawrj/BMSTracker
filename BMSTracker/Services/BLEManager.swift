@@ -355,6 +355,12 @@ final class BLEManager: NSObject {
             mosfetTemp = Double(Int16(bitPattern: uint16LE(data, 134 + ofs2))) * 0.1
         }
 
+        // 容量信息 (Section 2.11)
+        let remainCapacity = Double(uint32LE(data, 142 + ofs2)) * 0.001
+        let fullChargeCapacity = Double(uint32LE(data, 146 + ofs2)) * 0.001
+        let cycleCount = Int(uint32LE(data, 150 + ofs2))
+        let totalCycleCapacity = Double(uint32LE(data, 154 + ofs2)) * 0.001
+
         let bmsData = BMSData(
             current: current,
             soc: soc,
@@ -363,9 +369,13 @@ final class BLEManager: NSObject {
             temp1: temp1,
             temp2: temp2,
             mosfetTemp: mosfetTemp,
+            remainCapacity: remainCapacity,
+            fullChargeCapacity: fullChargeCapacity,
+            cycleCount: cycleCount,
+            totalCycleCapacity: totalCycleCapacity,
             lastUpdated: Date()
         )
-        logger.notice("📊 CellInfo: V=\(String(format: "%.2f", totalVoltage), privacy: .public)V I=\(String(format: "%.2f", current), privacy: .public)A SOC=\(String(format: "%.0f", soc), privacy: .public)% cells=\(cellVoltages.count, privacy: .public) T1=\(String(format: "%.1f", temp1), privacy: .public)°C T2=\(String(format: "%.1f", temp2), privacy: .public)°C MOS=\(String(format: "%.1f", mosfetTemp), privacy: .public)°C")
+        logger.notice("📊 CellInfo: V=\(String(format: "%.2f", totalVoltage), privacy: .public)V I=\(String(format: "%.2f", current), privacy: .public)A SOC=\(String(format: "%.0f", soc), privacy: .public)% cells=\(cellVoltages.count, privacy: .public) T1=\(String(format: "%.1f", temp1), privacy: .public)°C T2=\(String(format: "%.1f", temp2), privacy: .public)°C MOS=\(String(format: "%.1f", mosfetTemp), privacy: .public)°C remain=\(String(format: "%.1f", remainCapacity), privacy: .public)Ah full=\(String(format: "%.1f", fullChargeCapacity), privacy: .public)Ah cycles=\(cycleCount, privacy: .public)")
         dataStore.update(with: bmsData)
     }
 
@@ -391,6 +401,8 @@ final class BLEManager: NSObject {
             totalVoltage: totalVoltage,
             cellVoltages: cellVoltages,
             temp1: 0, temp2: 0, mosfetTemp: 0,
+            remainCapacity: 0, fullChargeCapacity: 0,
+            cycleCount: 0, totalCycleCapacity: 0,
             lastUpdated: Date()
         )
         dataStore.update(with: bmsData)

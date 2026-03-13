@@ -23,6 +23,14 @@ struct BMSData: Codable, Sendable {
     var temp2: Double
     /// MOS 管温度 (°C)
     var mosfetTemp: Double
+    /// 剩余容量 (Ah)
+    var remainCapacity: Double
+    /// 满充容量 (Ah)
+    var fullChargeCapacity: Double
+    /// 循环次数
+    var cycleCount: Int
+    /// 累计循环容量 (Ah)
+    var totalCycleCapacity: Double
     /// 最后更新时间
     var lastUpdated: Date
 
@@ -44,6 +52,8 @@ struct BMSData: Codable, Sendable {
         totalVoltage: 0.0,
         cellVoltages: [],
         temp1: 0, temp2: 0, mosfetTemp: 0,
+        remainCapacity: 0, fullChargeCapacity: 0,
+        cycleCount: 0, totalCycleCapacity: 0,
         lastUpdated: .distantPast
     )
 
@@ -57,6 +67,8 @@ struct BMSData: Codable, Sendable {
             3.313, 3.306, 3.317, 3.302
         ],
         temp1: 25.3, temp2: 24.8, mosfetTemp: 32.1,
+        remainCapacity: 68.5, fullChargeCapacity: 81.0,
+        cycleCount: 42, totalCycleCapacity: 3402.0,
         lastUpdated: Date()
     )
 }

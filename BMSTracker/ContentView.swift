@@ -66,6 +66,66 @@ struct ContentView: View {
                         )
                     }
 
+                    // 温度
+                    HStack(spacing: 12) {
+                        metricCard(
+                            title: "温度 T1",
+                            value: String(format: "%.1f", data.temp1),
+                            unit: "°C",
+                            icon: "thermometer.medium",
+                            color: data.temp1 > 45 ? .red : .green
+                        )
+                        metricCard(
+                            title: "温度 T2",
+                            value: String(format: "%.1f", data.temp2),
+                            unit: "°C",
+                            icon: "thermometer.medium",
+                            color: data.temp2 > 45 ? .red : .green
+                        )
+                        metricCard(
+                            title: "MOS",
+                            value: String(format: "%.1f", data.mosfetTemp),
+                            unit: "°C",
+                            icon: "cpu",
+                            color: data.mosfetTemp > 60 ? .red : .green
+                        )
+                    }
+
+                    // 容量 / 循环
+                    HStack(spacing: 12) {
+                        metricCard(
+                            title: "剩余容量",
+                            value: String(format: "%.1f", data.remainCapacity),
+                            unit: "Ah",
+                            icon: "battery.75",
+                            color: .cyan
+                        )
+                        metricCard(
+                            title: "满充容量",
+                            value: String(format: "%.1f", data.fullChargeCapacity),
+                            unit: "Ah",
+                            icon: "battery.100",
+                            color: .blue
+                        )
+                    }
+
+                    HStack(spacing: 12) {
+                        metricCard(
+                            title: "循环次数",
+                            value: "\(data.cycleCount)",
+                            unit: "次",
+                            icon: "arrow.triangle.2.circlepath",
+                            color: .purple
+                        )
+                        metricCard(
+                            title: "累计循环",
+                            value: String(format: "%.1f", data.totalCycleCapacity),
+                            unit: "Ah",
+                            icon: "arrow.triangle.2.circlepath.circle",
+                            color: .indigo
+                        )
+                    }
+
                     // Cell 电压网格
                     CellVoltageGridView(
                         cellVoltages: data.cellVoltages,
