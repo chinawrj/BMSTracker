@@ -118,15 +118,17 @@ struct BMSLiveActivity: Widget {
                 }
                 .frame(maxWidth: .infinity)
 
-                // 功率
+                // 功率（指示条用电流/2C）
                 VStack(spacing: 4) {
                     Text(String(format: "%.0fW", context.state.power))
                         .font(.system(.title, design: .rounded))
                         .fontWeight(.bold)
                         .foregroundStyle(context.state.current < 0 ? .orange : .green)
-                    Text(context.state.current < 0 ? "放电" : "充电")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
+                    let cRate = context.state.fullChargeCapacity > 0
+                        ? min(abs(context.state.current) / (context.state.fullChargeCapacity * 2), 1.0)
+                        : 0
+                    ProgressView(value: cRate)
+                        .tint(cRateColor(cRate))
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -187,5 +189,12 @@ struct BMSLiveActivity: Widget {
         if soc > 50 { return "battery.75" }
         if soc > 25 { return "battery.50" }
         return "battery.25"
+    }
+
+    /// 电流/2C 比率颜色：<0.5C 绿色，0.5-1C 橙色，>1C 红色
+    private func cRateColor(_ ratio: Double) -> Color {
+        if ratio > 0.5 { return .red }      // >1C
+        if ratio > 0.25 { return .orange }   // >0.5C
+        return .green
     }
 }
