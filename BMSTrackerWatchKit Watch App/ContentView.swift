@@ -11,13 +11,14 @@ struct ContentView: View {
     var receiver: WatchDataReceiver
 
     @State private var showPowerGauge = false
+    @State private var workoutManager = WatchWorkoutManager()
 
     private var data: BMSData { receiver.bmsData }
 
     var body: some View {
         Group {
             if showPowerGauge {
-                WatchPowerGaugeView(data: data)
+                WatchPowerGaugeView(data: data, workoutManager: workoutManager)
                     .onLongPressGesture(minimumDuration: 0.5) {
                         showPowerGauge = false
                     }

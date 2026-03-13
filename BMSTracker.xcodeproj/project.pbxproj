@@ -60,19 +60,19 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B40512C12F57200100AA7CFA /* Exceptions for "BMSTracker" folder in "BMSTracker" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = B40512602F570E4400AA7CFA /* BMSTracker */;
-		};
 		B40512C02F57200000AA7CFA /* Exceptions for "BMSTrackerWidgets" folder in "BMSTrackerWidgets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
 			target = B40512B52F57200000AA7CFA /* BMSTrackerWidgets */;
+		};
+		B40512C12F57200100AA7CFA /* Exceptions for "BMSTracker" folder in "BMSTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B40512602F570E4400AA7CFA /* BMSTracker */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -518,12 +518,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BMSTrackerWatchKit Watch App/BMSTrackerWatchKit Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BMSTrackerWatchKit;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "BMS Tracker uses HealthKit to keep the display active during monitoring.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "BMS Tracker uses HealthKit to keep the display active during monitoring.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.linetkux.BMSTracker;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -551,12 +554,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "BMSTrackerWatchKit Watch App/BMSTrackerWatchKit Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BMSTrackerWatchKit;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "BMS Tracker uses HealthKit to keep the display active during monitoring.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "BMS Tracker uses HealthKit to keep the display active during monitoring.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.linetkux.BMSTracker;
 				LD_RUNPATH_SEARCH_PATHS = (
