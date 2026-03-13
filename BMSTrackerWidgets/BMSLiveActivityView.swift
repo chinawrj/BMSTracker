@@ -94,16 +94,15 @@ struct BMSLiveActivity: Widget {
     @ViewBuilder
     private func lockScreenView(context: ActivityViewContext<BMSActivityAttributes>) -> some View {
         VStack(spacing: 8) {
-            // 顶部：设备名称 + 功率
+            // 顶部：设备名称 + 更新次数
             HStack {
                 Label(context.attributes.deviceName, systemImage: "battery.100")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Text(String(format: "%.0fW", context.state.power))
-                    .font(.system(.headline, design: .monospaced))
-                    .fontWeight(.bold)
-                    .foregroundStyle(context.state.current < 0 ? .orange : .green)
+                Label("\(context.state.updateCount)", systemImage: "arrow.triangle.2.circlepath")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
             }
 
             // SOC 进度条
@@ -113,23 +112,27 @@ struct BMSLiveActivity: Widget {
                     .fontWeight(.bold)
                     .foregroundStyle(socColor(context.state.soc))
 
-                VStack(spacing: 4) {
-                    ProgressView(value: context.state.soc / 100)
-                        .tint(socColor(context.state.soc))
-
-                    HStack {
-                        Text(String(format: "%.1fV", context.state.totalVoltage))
-                        Spacer()
-                        Text(String(format: "%.2fA", context.state.current))
-                        Spacer()
-                        Text(String(format: "%.1f°C", context.state.temp1))
-                    }
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                }
+                ProgressView(value: context.state.soc / 100)
+                    .tint(socColor(context.state.soc))
             }
 
-            // 底部：容量 + 更新次数
+            // 数据网格：电压 / 电流 / 功率 / 温度
+            HStack(spacing: 0) {
+                statItem(label: "电压",
+                         value: String(format: "%.1fV", context.state.totalVoltage),
+                         color: .blue)
+                statItem(label: "电流",
+                         value: String(format: "%.2fA", context.state.current),
+                         color: context.state.current < 0 ? .orange : .green)
+                statItem(label: "功率",
+                         value: String(format: "%.0fW", context.state.power),
+                         color: context.state.current < 0 ? .orange : .green)
+                statItem(label: "温度",
+                         value: String(format: "%.1f°C", context.state.temp1),
+                         color: context.state.temp1 > 45 ? .red : .primary)
+            }
+
+            // 底部：容量 + 更新时间
             HStack {
                 Text(String(format: "剩余 %.1f / %.1f Ah",
                             context.state.remainCapacity,
@@ -137,16 +140,26 @@ struct BMSLiveActivity: Widget {
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 Spacer()
-                Label("\(context.state.updateCount)", systemImage: "arrow.triangle.2.circlepath")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-                Spacer()
                 Text(context.state.lastUpdated, style: .relative)
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
         }
         .padding()
+    }
+
+    @ViewBuilder
+    private func statItem(label: String, value: String, color: Color) -> some View {
+        VStack(spacing: 2) {
+            Text(label)
+                .font(.system(size: 10))
+                .foregroundStyle(.secondary)
+            Text(value)
+                .font(.system(.caption, design: .monospaced))
+                .fontWeight(.semibold)
+                .foregroundStyle(color)
+        }
+        .frame(maxWidth: .infinity)
     }
 
     // MARK: - 辅助
