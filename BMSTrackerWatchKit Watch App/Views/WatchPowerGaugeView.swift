@@ -60,56 +60,56 @@ struct WatchPowerGaugeView: View {
             ZStack {
                 Color.black.ignoresSafeArea()
 
-                // 跑道背景轨道
-                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-                    .stroke(Color.white.opacity(0.12), lineWidth: trackWidth)
-                    .padding(trackInset)
+                VStack(spacing: 8) {
+                    // 功率区域（被跑道框住）
+                    ZStack {
+                        // 跑道背景轨道
+                        RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                            .stroke(Color.white.opacity(0.12), lineWidth: trackWidth)
 
-                // 跑道 C-rate 填充
-                StadiumTrack(progress: cRate, cornerRadius: cornerRadius)
-                    .stroke(cRateColor, style: StrokeStyle(lineWidth: trackWidth, lineCap: .round))
-                    .padding(trackInset)
-                    .animation(.easeInOut(duration: 0.4), value: cRate)
+                        // 跑道 C-rate 填充
+                        StadiumTrack(progress: cRate, cornerRadius: cornerRadius)
+                            .stroke(cRateColor, style: StrokeStyle(lineWidth: trackWidth, lineCap: .round))
+                            .animation(.easeInOut(duration: 0.4), value: cRate)
 
-                VStack(spacing: 0) {
-                    Spacer()
+                        VStack(spacing: 2) {
+                            // 状态标签
+                            Text(powerLabel)
+                                .font(.system(size: fontSize * 0.1, weight: .medium, design: .monospaced))
+                                .foregroundStyle(powerColor.opacity(0.6))
+                                .tracking(2)
 
-                    // 状态标签
-                    Text(powerLabel)
-                        .font(.system(size: fontSize * 0.1, weight: .medium, design: .monospaced))
-                        .foregroundStyle(powerColor.opacity(0.6))
-                        .tracking(2)
+                            // 超大功率值
+                            HStack(alignment: .firstTextBaseline, spacing: 2) {
+                                Text(powerText)
+                                    .font(.system(size: fontSize, weight: .bold, design: .rounded))
+                                    .foregroundStyle(powerColor)
+                                    .minimumScaleFactor(0.4)
+                                    .lineLimit(1)
+                                Text("W")
+                                    .font(.system(size: unitSize, weight: .medium, design: .rounded))
+                                    .foregroundStyle(powerColor.opacity(0.5))
+                            }
+                            .contentTransition(.numericText())
+                            .animation(.easeInOut(duration: 0.3), value: powerText)
 
-                    // 超大功率值
-                    HStack(alignment: .firstTextBaseline, spacing: 2) {
-                        Text(powerText)
-                            .font(.system(size: fontSize, weight: .bold, design: .rounded))
-                            .foregroundStyle(powerColor)
-                            .minimumScaleFactor(0.4)
-                            .lineLimit(1)
-                        Text("W")
-                            .font(.system(size: unitSize, weight: .medium, design: .rounded))
-                            .foregroundStyle(powerColor.opacity(0.5))
+                            // C-rate 数值
+                            Text(String(format: "%.2fC", data.fullChargeCapacity > 0
+                                        ? abs(data.current) / data.fullChargeCapacity : 0))
+                                .font(.system(size: fontSize * 0.12, design: .monospaced))
+                                .foregroundStyle(cRateColor.opacity(0.7))
+                        }
+                        .padding(.vertical, 8)
                     }
-                    .contentTransition(.numericText())
-                    .animation(.easeInOut(duration: 0.3), value: powerText)
+                    .padding(.horizontal, trackInset)
 
-                    // C-rate 数值
-                    Text(String(format: "%.2fC", data.fullChargeCapacity > 0
-                                ? abs(data.current) / data.fullChargeCapacity : 0))
-                        .font(.system(size: fontSize * 0.12, design: .monospaced))
-                        .foregroundStyle(cRateColor.opacity(0.7))
-                        .padding(.top, 2)
-
-                    Spacer()
-
-                    // 底部：小 SoC 圆环 + V/A
+                    // 底部：小 SoC 圆环 + V/A（跑道外面）
                     HStack(spacing: 6) {
                         miniSocRing
                         miniLabel(String(format: "%.1fV", data.totalVoltage))
                         miniLabel(String(format: "%.1fA", data.current))
                     }
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 4)
                 }
             }
         }
