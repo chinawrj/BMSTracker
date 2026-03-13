@@ -21,6 +21,7 @@ struct BMSActivityAttributes: ActivityAttributes {
         var remainCapacity: Double
         var fullChargeCapacity: Double
         var lastUpdated: Date
+        var updateCount: Int
 
         /// 实时功率 (W)
         var power: Double {

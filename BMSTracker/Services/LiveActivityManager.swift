@@ -14,6 +14,7 @@ private let logger = Logger(subsystem: "com.linetkux.BMSTracker", category: "Liv
 /// 管理 BMS 实时活动（锁屏/灵动岛）
 final class LiveActivityManager {
     private var activity: Activity<BMSActivityAttributes>?
+    private var updateCount: Int = 0
 
     /// 启动 Live Activity
     func startActivity(deviceName: String, data: BMSData) {
@@ -27,6 +28,7 @@ final class LiveActivityManager {
             endActivity()
         }
 
+        updateCount = 0
         let attributes = BMSActivityAttributes(deviceName: deviceName)
         let state = contentState(from: data)
 
@@ -45,6 +47,7 @@ final class LiveActivityManager {
     /// 更新 Live Activity 数据
     func updateActivity(with data: BMSData) {
         guard let activity else { return }
+        updateCount += 1
         let state = contentState(from: data)
         Task {
             await activity.update(.init(state: state, staleDate: Date().addingTimeInterval(300)))
@@ -76,7 +79,8 @@ final class LiveActivityManager {
             temp1: data.temp1,
             remainCapacity: data.remainCapacity,
             fullChargeCapacity: data.fullChargeCapacity,
-            lastUpdated: data.lastUpdated
+            lastUpdated: data.lastUpdated,
+            updateCount: updateCount
         )
     }
 }

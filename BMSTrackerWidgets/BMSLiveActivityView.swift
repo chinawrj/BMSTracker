@@ -129,13 +129,17 @@ struct BMSLiveActivity: Widget {
                 }
             }
 
-            // 底部：容量
+            // 底部：容量 + 更新次数
             HStack {
                 Text(String(format: "剩余 %.1f / %.1f Ah",
                             context.state.remainCapacity,
                             context.state.fullChargeCapacity))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
+                Spacer()
+                Label("\(context.state.updateCount)", systemImage: "arrow.triangle.2.circlepath")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
                 Spacer()
                 Text(context.state.lastUpdated, style: .relative)
                     .font(.caption2)
