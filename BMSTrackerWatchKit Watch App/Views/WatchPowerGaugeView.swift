@@ -8,6 +8,7 @@
 import SwiftUI
 
 /// Watch 全屏功率仪表视图
+/// 带跑道形 C-rate 指示环（2C 满格）
 struct WatchPowerGaugeView: View {
     let data: BMSData
 
@@ -35,13 +36,40 @@ struct WatchPowerGaugeView: View {
         return .gray
     }
 
+    /// 电流与 2C 的比率 (0~1)
+    private var cRate: Double {
+        guard data.fullChargeCapacity > 0 else { return 0 }
+        return min(abs(data.current) / (data.fullChargeCapacity * 2), 1.0)
+    }
+
+    /// C-rate 颜色（与 iOS 锁屏一致）
+    private var cRateColor: Color {
+        if cRate > 0.5 { return .red }      // >1C
+        if cRate > 0.25 { return .orange }   // >0.5C
+        return .green
+    }
+
     var body: some View {
         GeometryReader { geo in
-            let fontSize = min(geo.size.width * 0.5, geo.size.height * 0.45)
+            let fontSize = min(geo.size.width * 0.45, geo.size.height * 0.38)
             let unitSize = fontSize * 0.22
+            let trackWidth: CGFloat = 6
+            let trackInset: CGFloat = 4
+            let cornerRadius = min(geo.size.width, geo.size.height) * 0.3
 
             ZStack {
                 Color.black.ignoresSafeArea()
+
+                // 跑道背景轨道
+                RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                    .stroke(Color.white.opacity(0.12), lineWidth: trackWidth)
+                    .padding(trackInset)
+
+                // 跑道 C-rate 填充
+                StadiumTrack(progress: cRate, cornerRadius: cornerRadius)
+                    .stroke(cRateColor, style: StrokeStyle(lineWidth: trackWidth, lineCap: .round))
+                    .padding(trackInset)
+                    .animation(.easeInOut(duration: 0.4), value: cRate)
 
                 VStack(spacing: 0) {
                     Spacer()
@@ -65,6 +93,13 @@ struct WatchPowerGaugeView: View {
                     }
                     .contentTransition(.numericText())
                     .animation(.easeInOut(duration: 0.3), value: powerText)
+
+                    // C-rate 数值
+                    Text(String(format: "%.2fC", data.fullChargeCapacity > 0
+                                ? abs(data.current) / data.fullChargeCapacity : 0))
+                        .font(.system(size: fontSize * 0.12, design: .monospaced))
+                        .foregroundStyle(cRateColor.opacity(0.7))
+                        .padding(.top, 2)
 
                     Spacer()
 
@@ -108,6 +143,29 @@ struct WatchPowerGaugeView: View {
         Text(text)
             .font(.system(.caption2, design: .monospaced))
             .foregroundStyle(.white.opacity(0.35))
+    }
+}
+
+// MARK: - 跑道形 Shape（圆角矩形描边进度）
+
+/// 沿圆角矩形（跑道形）路径绘制部分描边
+struct StadiumTrack: Shape {
+    var progress: Double
+    var cornerRadius: CGFloat
+
+    var animatableData: Double {
+        get { progress }
+        set { progress = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        // 完整的圆角矩形路径
+        let fullPath = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .path(in: rect)
+
+        // 计算路径总长度，截取 progress 比例
+        let trimmed = fullPath.trimmedPath(from: 0, to: progress)
+        return trimmed
     }
 }
 
