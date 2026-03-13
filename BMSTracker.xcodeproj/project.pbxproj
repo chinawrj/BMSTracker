@@ -59,6 +59,16 @@
 		B40512B02F57200000AA7CFA /* BMSTrackerWidgets.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BMSTrackerWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B40512C02F57200000AA7CFA /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B40512B52F57200000AA7CFA /* BMSTrackerWidgets */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B40512632F570E4400AA7CFA /* BMSTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -72,6 +82,9 @@
 		};
 		B40512B12F57200000AA7CFA /* BMSTrackerWidgets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B40512C02F57200000AA7CFA /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+			);
 			path = BMSTrackerWidgets;
 			sourceTree = "<group>";
 		};
@@ -563,9 +576,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BMSTrackerWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BMSTrackerWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -593,9 +606,9 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BMSTrackerWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = BMSTrackerWidgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				INFOPLIST_KEY_NSExtension_NSExtensionPointIdentifier = "com.apple.widgetkit-extension";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
