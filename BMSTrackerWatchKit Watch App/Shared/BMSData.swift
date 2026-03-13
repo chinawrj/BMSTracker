@@ -2,7 +2,7 @@
 //  BMSData.swift
 //  BMSTracker
 //
-//  Created by 王如军 on 3/3/26.
+//  Created by Rujun Wang on 3/3/26.
 //
 
 import Foundation

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  BMSTrackerWatchKit Watch App
 //
-//  Created by 王如军 on 3/3/26.
+//  Created by Rujun Wang on 3/3/26.
 //
 
 import SwiftUI

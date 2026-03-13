@@ -2,7 +2,7 @@
 //  WatchWorkoutManager.swift
 //  BMSTrackerWatchKit Watch App
 //
-//  Created by 王如军 on 3/13/26.
+//  Created by Rujun Wang on 3/13/26.
 //
 
 import Foundation
