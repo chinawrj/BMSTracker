@@ -12,6 +12,7 @@ import SwiftUI
 /// 启动时激活 Workout Session → 屏幕常亮 + Always-On Display
 struct WatchPowerGaugeView: View {
     let data: BMSData
+    let updateCount: Int
     let workoutManager: WatchWorkoutManager
 
     @Environment(\.isLuminanceReduced) private var isLuminanceReduced
@@ -113,12 +114,13 @@ struct WatchPowerGaugeView: View {
                     }
                     .padding(.horizontal, trackInset)
 
-                    // 底部：小 SoC 圆环 + V/A（跑道外面）
+                    // 底部：小 SoC 圆环 + V/A + 更新次数（跑道外面）
                     if !dimmed {
                         HStack(spacing: 6) {
                             miniSocRing
                             miniLabel(String(format: "%.1fV", data.totalVoltage))
                             miniLabel(String(format: "%.1fA", data.current))
+                            miniLabel("#\(updateCount)")
                         }
                         .padding(.bottom, 4)
                     }
@@ -188,5 +190,5 @@ struct StadiumTrack: Shape {
 }
 
 #Preview {
-    WatchPowerGaugeView(data: .preview, workoutManager: WatchWorkoutManager())
+    WatchPowerGaugeView(data: .preview, updateCount: 42, workoutManager: WatchWorkoutManager())
 }

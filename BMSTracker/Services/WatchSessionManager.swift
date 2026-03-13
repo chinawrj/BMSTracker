@@ -38,7 +38,7 @@ final class WatchSessionManager: NSObject {
 
     /// 通过 applicationContext 发送最新 BMS 数据
     /// applicationContext 会在 Watch 端醒来时自动递送最新一条
-    func sendBMSData(_ data: BMSData) {
+    func sendBMSData(_ data: BMSData, updateCount: Int = 0) {
         guard let session = session,
               session.activationState == .activated,
               session.isPaired,
@@ -46,7 +46,7 @@ final class WatchSessionManager: NSObject {
             return
         }
 
-        let payload = WatchPayload.encode(data)
+        let payload = WatchPayload.encode(data, updateCount: updateCount)
         do {
             try session.updateApplicationContext(payload)
             lastSentDate = Date()
@@ -59,18 +59,18 @@ final class WatchSessionManager: NSObject {
     }
 
     /// 如果 Watch 当前可达，发送即时消息（低延迟）
-    func sendBMSDataInteractively(_ data: BMSData) {
+    func sendBMSDataInteractively(_ data: BMSData, updateCount: Int = 0) {
         guard let session = session,
               session.isReachable else {
             // Watch 不可达，退回到 applicationContext
-            sendBMSData(data)
+            sendBMSData(data, updateCount: updateCount)
             return
         }
 
-        let payload = WatchPayload.encode(data)
+        let payload = WatchPayload.encode(data, updateCount: updateCount)
         session.sendMessage(payload, replyHandler: nil) { [weak self] _ in
             // 即时消息失败，退回到 applicationContext
-            self?.sendBMSData(data)
+            self?.sendBMSData(data, updateCount: updateCount)
         }
     }
 }

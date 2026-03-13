@@ -51,6 +51,9 @@ final class BMSDataStore {
     /// Live Activity 管理器
     var liveActivityManager: LiveActivityManager?
 
+    /// 累计数据更新次数
+    var updateCount: Int = 0
+
     // MARK: - Cache Persistence
 
     private static let cacheKey = "BMSDataCache"
@@ -72,6 +75,7 @@ final class BMSDataStore {
 
     /// 由 BLE 后台任务调用，更新数据并持久化，同时推送给 Watch 和 Live Activity
     func update(with newData: BMSData) {
+        updateCount += 1
         self.bmsData = newData
         saveToCache()
         pushToWatch(newData)
@@ -83,10 +87,10 @@ final class BMSDataStore {
         guard let watchSession = watchSession else { return }
         if watchSession.isReachable {
             // Watch 当前活跃，用即时消息（低延迟）
-            watchSession.sendBMSDataInteractively(data)
+            watchSession.sendBMSDataInteractively(data, updateCount: updateCount)
         } else {
             // Watch 不活跃，用 applicationContext（下次唤醒时递送）
-            watchSession.sendBMSData(data)
+            watchSession.sendBMSData(data, updateCount: updateCount)
         }
     }
 }

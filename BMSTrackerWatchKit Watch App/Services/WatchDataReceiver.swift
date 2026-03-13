@@ -16,6 +16,9 @@ final class WatchDataReceiver: NSObject {
     /// 当前 BMS 数据
     var bmsData: BMSData = .placeholder
 
+    /// 累计数据更新次数（从iOS端同步）
+    var updateCount: Int = 0
+
     /// 是否已收到过数据
     var hasData: Bool {
         bmsData.lastUpdated != Date.distantPast
@@ -58,6 +61,7 @@ final class WatchDataReceiver: NSObject {
     private func handleReceivedPayload(_ payload: [String: Any]) {
         guard let data = WatchPayload.decode(from: payload) else { return }
         self.bmsData = data
+        self.updateCount = WatchPayload.decodeUpdateCount(from: payload)
         cacheData(data)
     }
 }

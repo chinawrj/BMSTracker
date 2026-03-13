@@ -18,7 +18,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if showPowerGauge {
-                WatchPowerGaugeView(data: data, workoutManager: workoutManager)
+                WatchPowerGaugeView(data: data, updateCount: receiver.updateCount, workoutManager: workoutManager)
                     .onLongPressGesture(minimumDuration: 0.5) {
                         showPowerGauge = false
                     }
@@ -232,6 +232,10 @@ struct ContentView: View {
             Text(receiver.isCompanionReachable ? "iPhone 已连接" : "等待数据...")
                 .font(.caption2)
                 .foregroundStyle(.secondary)
+            Spacer()
+            Label("\(receiver.updateCount)", systemImage: "arrow.triangle.2.circlepath")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
         }
         .padding(.top, 4)
     }

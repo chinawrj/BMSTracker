@@ -14,13 +14,14 @@ enum WatchPayload {
     private static let decoder = JSONDecoder()
 
     /// 将 BMSData 编码为 WCSession 可传输的 [String: Any] 字典
-    static func encode(_ data: BMSData) -> [String: Any] {
+    static func encode(_ data: BMSData, updateCount: Int = 0) -> [String: Any] {
         // applicationContext / userInfo 只接受 plist-compatible 类型
         // 用 JSON data 作为值，保证 Codable 兼容
         guard let jsonData = try? encoder.encode(data) else { return [:] }
         return [
             "bmsData": jsonData,
-            "timestamp": data.lastUpdated.timeIntervalSince1970
+            "timestamp": data.lastUpdated.timeIntervalSince1970,
+            "updateCount": updateCount
         ]
     }
 
@@ -28,5 +29,10 @@ enum WatchPayload {
     static func decode(from dict: [String: Any]) -> BMSData? {
         guard let jsonData = dict["bmsData"] as? Data else { return nil }
         return try? decoder.decode(BMSData.self, from: jsonData)
+    }
+
+    /// 从字典中提取更新次数
+    static func decodeUpdateCount(from dict: [String: Any]) -> Int {
+        dict["updateCount"] as? Int ?? 0
     }
 }
