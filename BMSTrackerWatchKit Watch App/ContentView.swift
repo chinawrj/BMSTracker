@@ -52,19 +52,6 @@ struct ContentView: View {
                         )
                     }
 
-                    // Cell 压差
-                    if let delta = data.cellVoltageDelta {
-                        HStack {
-                            Text("Cell 压差")
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            Text(String(format: "%.1f mV", delta * 1000))
-                                .fontWeight(.medium)
-                        }
-                        .font(.caption2)
-                        .padding(.horizontal, 4)
-                    }
-
                     // 温度
                     HStack(spacing: 8) {
                         metricBlock(
@@ -117,6 +104,19 @@ struct ContentView: View {
                             unit: "Ah",
                             color: .indigo
                         )
+                    }
+
+                    // Cell 压差
+                    if let delta = data.cellVoltageDelta {
+                        HStack {
+                            Text("Cell 压差")
+                                .foregroundStyle(.secondary)
+                            Spacer()
+                            Text(String(format: "%.1f mV", delta * 1000))
+                                .fontWeight(.medium)
+                        }
+                        .font(.caption2)
+                        .padding(.horizontal, 4)
                     }
 
                     // Cell 电压列表（紧凑）
