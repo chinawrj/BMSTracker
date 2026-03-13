@@ -11,6 +11,7 @@ struct ContentView: View {
     var dataStore: BMSDataStore
     var bleManager: BLEManager
     var simulator: BMSSimulator
+    var liveActivityManager: LiveActivityManager
 
     @State private var isSimulating = false
     @State private var showDeviceList = false
@@ -143,7 +144,10 @@ struct ContentView: View {
             .navigationTitle("BMS Monitor")
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    simulateButton
+                    HStack(spacing: 12) {
+                        simulateButton
+                        liveActivityButton
+                    }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     bleConnectionButton
@@ -162,6 +166,16 @@ struct ContentView: View {
                 if dataStore.connectionState == .disconnected {
                     bleManager.startScanning()
                     showDeviceList = true
+                }
+            }
+            .onChange(of: dataStore.connectionState) { oldValue, newValue in
+                if newValue == .connected && !liveActivityManager.isActive {
+                    liveActivityManager.startActivity(
+                        deviceName: "JK-BMS",
+                        data: dataStore.bmsData
+                    )
+                } else if newValue == .disconnected && liveActivityManager.isActive {
+                    liveActivityManager.endActivity()
                 }
             }
         }
@@ -323,6 +337,24 @@ struct ContentView: View {
         }
     }
 
+    // MARK: - Live Activity 按钮
+
+    private var liveActivityButton: some View {
+        Button {
+            if liveActivityManager.isActive {
+                liveActivityManager.endActivity()
+            } else {
+                liveActivityManager.startActivity(
+                    deviceName: "JK-BMS",
+                    data: dataStore.bmsData
+                )
+            }
+        } label: {
+            Image(systemName: liveActivityManager.isActive ? "pin.circle.fill" : "pin.circle")
+                .foregroundStyle(liveActivityManager.isActive ? .orange : .gray)
+        }
+    }
+
     // MARK: - BLE 连接按钮
 
     private var bleConnectionButton: some View {
@@ -363,6 +395,7 @@ struct ContentView: View {
     ContentView(
         dataStore: store,
         bleManager: bleManager ?? BLEManager(dataStore: store),
-        simulator: BMSSimulator(dataStore: store)
+        simulator: BMSSimulator(dataStore: store),
+        liveActivityManager: LiveActivityManager()
     )
 }

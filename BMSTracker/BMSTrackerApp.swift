@@ -11,6 +11,7 @@ import SwiftUI
 struct BMSTrackerApp: App {
     @State private var dataStore = BMSDataStore()
     @State private var watchSession = WatchSessionManager()
+    @State private var liveActivityManager = LiveActivityManager()
     @State private var bleManager: BLEManager?
     @State private var simulator: BMSSimulator?
 
@@ -20,12 +21,14 @@ struct BMSTrackerApp: App {
                 ContentView(
                     dataStore: dataStore,
                     bleManager: bleManager,
-                    simulator: simulator
+                    simulator: simulator,
+                    liveActivityManager: liveActivityManager
                 )
             } else {
                 ProgressView("初始化中...")
                     .task {
                         dataStore.watchSession = watchSession
+                        dataStore.liveActivityManager = liveActivityManager
                         dataStore.loadFromCache()
                         bleManager = BLEManager(dataStore: dataStore)
                         simulator = BMSSimulator(dataStore: dataStore)

@@ -48,6 +48,9 @@ final class BMSDataStore {
     /// Watch 会话管理器，数据更新时自动推送给 Apple Watch
     var watchSession: WatchSessionManager?
 
+    /// Live Activity 管理器
+    var liveActivityManager: LiveActivityManager?
+
     // MARK: - Cache Persistence
 
     private static let cacheKey = "BMSDataCache"
@@ -67,11 +70,12 @@ final class BMSDataStore {
         UserDefaults.standard.set(data, forKey: Self.cacheKey)
     }
 
-    /// 由 BLE 后台任务调用，更新数据并持久化，同时推送给 Watch
+    /// 由 BLE 后台任务调用，更新数据并持久化，同时推送给 Watch 和 Live Activity
     func update(with newData: BMSData) {
         self.bmsData = newData
         saveToCache()
         pushToWatch(newData)
+        liveActivityManager?.updateActivity(with: newData)
     }
 
     /// 推送数据给 Apple Watch
