@@ -60,7 +60,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B40512C02F57200000AA7CFA /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		B40512C12F57200100AA7CFA /* Exceptions for "BMSTracker" folder in "BMSTracker" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = B40512602F570E4400AA7CFA /* BMSTracker */;
+		};
+		B40512C02F57200000AA7CFA /* Exceptions for "BMSTrackerWidgets" folder in "BMSTrackerWidgets" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -72,6 +79,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B40512632F570E4400AA7CFA /* BMSTracker */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B40512C12F57200100AA7CFA /* Exceptions for "BMSTracker" folder in "BMSTracker" target */,
+			);
 			path = BMSTracker;
 			sourceTree = "<group>";
 		};
@@ -83,7 +93,7 @@
 		B40512B12F57200000AA7CFA /* BMSTrackerWidgets */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				B40512C02F57200000AA7CFA /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				B40512C02F57200000AA7CFA /* Exceptions for "BMSTrackerWidgets" folder in "BMSTrackerWidgets" target */,
 			);
 			path = BMSTrackerWidgets;
 			sourceTree = "<group>";
@@ -443,13 +453,11 @@
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BMSTracker/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "需要蓝牙权限来连接 BMS 设备并读取电池数据";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = (
-					"bluetooth-central",
-				);
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -480,13 +488,11 @@
 				DEVELOPMENT_TEAM = WM4JXVE5GV;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BMSTracker/Info.plist;
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "需要蓝牙权限来连接 BMS 设备并读取电池数据";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UIBackgroundModes = (
-					"bluetooth-central",
-				);
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
