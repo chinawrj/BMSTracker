@@ -16,6 +16,11 @@ final class LiveActivityManager {
     private var activity: Activity<BMSActivityAttributes>?
     private var updateCount: Int = 0
 
+    init() {
+        // 清理上次 app 被杀后遗留的 Live Activity
+        endAllStaleActivities()
+    }
+
     /// 启动 Live Activity
     func startActivity(deviceName: String, data: BMSData) {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
@@ -23,10 +28,8 @@ final class LiveActivityManager {
             return
         }
 
-        // 如果已有活动，先结束
-        if activity != nil {
-            endActivity()
-        }
+        // 结束所有已有活动（包括遗留的）
+        endAllStaleActivities()
 
         updateCount = 0
         let attributes = BMSActivityAttributes(deviceName: deviceName)
@@ -62,6 +65,24 @@ final class LiveActivityManager {
         }
         self.activity = nil
         logger.notice("⏹ Live Activity 已结束")
+    }
+
+    /// 结束所有遗留的 BMSActivityAttributes 类型 Live Activity
+    private func endAllStaleActivities() {
+        // 结束当前持有的
+        if let activity {
+            Task {
+                await activity.end(nil, dismissalPolicy: .immediate)
+            }
+            self.activity = nil
+        }
+        // 结束系统中所有同类型的（含上次 app 被杀后遗留的）
+        for existing in Activity<BMSActivityAttributes>.activities {
+            Task {
+                await existing.end(nil, dismissalPolicy: .immediate)
+            }
+            logger.notice("🧹 清理遗留 Live Activity: \(existing.id)")
+        }
     }
 
     /// 当前是否有活动运行中
