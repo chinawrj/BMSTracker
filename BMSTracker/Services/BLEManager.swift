@@ -64,7 +64,15 @@ final class BLEManager: NSObject {
 
     // 自动重连
     private var shouldAutoReconnect = false
-    private var lastConnectedPeripheralID: UUID?
+    private var lastConnectedPeripheralID: UUID? {
+        didSet {
+            if let id = lastConnectedPeripheralID {
+                UserDefaults.standard.set(id.uuidString, forKey: "lastConnectedPeripheralID")
+            } else {
+                UserDefaults.standard.removeObject(forKey: "lastConnectedPeripheralID")
+            }
+        }
+    }
 
     // 写入命令码
     private let CMD_CELL_INFO: UInt8   = 0x96
@@ -88,6 +96,12 @@ final class BLEManager: NSObject {
     init(dataStore: BMSDataStore) {
         self.dataStore = dataStore
         super.init()
+        // 从 UserDefaults 恢复上次连接的设备 ID
+        if let idString = UserDefaults.standard.string(forKey: "lastConnectedPeripheralID"),
+           let id = UUID(uuidString: idString) {
+            lastConnectedPeripheralID = id
+            shouldAutoReconnect = true
+        }
     }
 
     // MARK: - 公开方法
