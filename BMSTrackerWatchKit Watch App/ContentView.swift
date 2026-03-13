@@ -65,6 +65,60 @@ struct ContentView: View {
                         .padding(.horizontal, 4)
                     }
 
+                    // 温度
+                    HStack(spacing: 8) {
+                        metricBlock(
+                            label: "T1",
+                            value: String(format: "%.1f", data.temp1),
+                            unit: "°C",
+                            color: data.temp1 > 45 ? .red : .green
+                        )
+                        metricBlock(
+                            label: "T2",
+                            value: String(format: "%.1f", data.temp2),
+                            unit: "°C",
+                            color: data.temp2 > 45 ? .red : .green
+                        )
+                        metricBlock(
+                            label: "MOS",
+                            value: String(format: "%.1f", data.mosfetTemp),
+                            unit: "°C",
+                            color: data.mosfetTemp > 60 ? .red : .green
+                        )
+                    }
+
+                    // 容量
+                    HStack(spacing: 8) {
+                        metricBlock(
+                            label: "剩余",
+                            value: String(format: "%.1f", data.remainCapacity),
+                            unit: "Ah",
+                            color: .cyan
+                        )
+                        metricBlock(
+                            label: "满充",
+                            value: String(format: "%.1f", data.fullChargeCapacity),
+                            unit: "Ah",
+                            color: .blue
+                        )
+                    }
+
+                    // 循环
+                    HStack(spacing: 8) {
+                        metricBlock(
+                            label: "循环",
+                            value: "\(data.cycleCount)",
+                            unit: "次",
+                            color: .purple
+                        )
+                        metricBlock(
+                            label: "累计",
+                            value: String(format: "%.0f", data.totalCycleCapacity),
+                            unit: "Ah",
+                            color: .indigo
+                        )
+                    }
+
                     // Cell 电压列表（紧凑）
                     if !data.cellVoltages.isEmpty {
                         cellVoltageList
