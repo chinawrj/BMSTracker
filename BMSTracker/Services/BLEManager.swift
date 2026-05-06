@@ -335,20 +335,30 @@ final class BLEManager: NSObject {
         var effectiveIs32S = is32S
 
         // 自动检测 32S 帧格式:
-        // 有些 "JK-" 前缀的设备 (如 JK-BD4A20S4P) 实际使用 32S 帧布局
+        // 有些 "JK-" 前缀的设备 (如 JK-BD4A20S4P / JK-BD6A24S6P) 实际使用 32S 帧布局
         // 24S: totalVoltage at offset 118, 32S: at offset 150 (118+32)
+        //
+        // 启发式: 比较两个候选 offset 上的"总电压"哪个更接近电芯电压求和。
+        // 不能只检查 totalV_24S < 1.0:
+        //   24S 满配的 BD 板子上，offset 118 落在 cellWireRes (cell 20/21)
+        //   两个非零电阻拼成 uint32 后会产生 ~65V 的伪值，导致旧条件失效。
         if !effectiveIs32S {
             var cellSum: Double = 0
             for i in 0..<24 {
                 let v = Double(uint16LE(data, i * 2 + 6)) * 0.001
-                if v > 0 { cellSum += v }
+                if v > 0.5 { cellSum += v }   // 只累计貌似真实的单体电压
             }
             let totalV_24S = Double(uint32LE(data, 118)) * 0.001
             let totalV_32S = Double(uint32LE(data, 150)) * 0.001
+            let diff24S = abs(totalV_24S - cellSum)
+            let diff32S = abs(totalV_32S - cellSum)
 
-            if totalV_24S < 1.0 && cellSum > 5.0 && totalV_32S > 5.0
-                && abs(totalV_32S - cellSum) < cellSum * 0.1 {
-                logger.notice("⚠️ 自动切换到 32S 帧格式: 24S=\(String(format: "%.1f", totalV_24S), privacy: .public)V 32S=\(String(format: "%.1f", totalV_32S), privacy: .public)V 电芯和=\(String(format: "%.1f", cellSum), privacy: .public)V")
+            // 当 32S offset 上的总压更贴近电芯之和（且 24S offset 明显不匹配）时切换布局
+            if cellSum > 5.0
+                && totalV_32S > 5.0
+                && diff32S < cellSum * 0.05
+                && diff32S < diff24S {
+                logger.notice("⚠️ 自动切换到 32S 帧格式: 24S=\(String(format: "%.2f", totalV_24S), privacy: .public)V (Δ\(String(format: "%.2f", diff24S), privacy: .public)) 32S=\(String(format: "%.2f", totalV_32S), privacy: .public)V (Δ\(String(format: "%.2f", diff32S), privacy: .public)) 电芯和=\(String(format: "%.2f", cellSum), privacy: .public)V")
                 effectiveIs32S = true
                 if protocolVersion == .jk02_24s {
                     protocolVersion = .jk02_32s
